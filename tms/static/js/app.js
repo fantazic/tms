@@ -3,7 +3,7 @@ application = new Vue({
 
   ready: function () {
     this.$http.get(
-      '/api/me/',
+      '/tms/api/me/',
       function (data) {
         console.log(data.message)
         if (data.message == 'Login') {
@@ -92,7 +92,7 @@ application = new Vue({
       that = this
 
       this.$http.post(
-        that.isSignup ? '/api/signup/' : '/api/login/',
+        that.isSignup ? '/tms/api/signup/' : '/tms/api/login/',
         that.user,
         function (data) {
           console.log(data.message)
@@ -123,7 +123,7 @@ application = new Vue({
       that = this
 
       this.$http.get(
-        '/api/logout/',
+        '/tms/api/logout/',
         function (data) {
           console.log(data.message)
           if (data.message == "Success") {
@@ -152,7 +152,7 @@ application = new Vue({
       that = this
 
       this.$http.post(
-        '/api/update_task/',
+        '/tms/api/update_task/',
         that.newTask,
         function (data) {
           console.log(data)
@@ -184,7 +184,7 @@ application = new Vue({
       that = this
 
       this.$http.post(
-        '/api/add_task/',
+        '/tms/api/add_task/',
         that.newTask,
         function (data) {
           console.log(data)
@@ -213,7 +213,7 @@ application = new Vue({
       that = this
 
       this.$http.get(
-        '/api/get_tasks/',
+        '/tms/api/get_tasks/',
         {'date': that.date},
         function (data) {
           console.log(data)
@@ -231,7 +231,7 @@ application = new Vue({
       that = this
 
       this.$http.get(
-        '/api/get_dates/',
+        '/tms/api/get_dates/',
         {'date': that.date},
         function (data) {
           console.log(data)
@@ -271,7 +271,7 @@ application = new Vue({
       that = this
 
       this.$http.post(
-        '/api/set_hour/',
+        '/tms/api/set_hour/',
         { 'hour': that.preferredHour, 'date': that.date },
         function (data) {
           console.log(data)
@@ -295,7 +295,7 @@ application = new Vue({
       that = this
 
       this.$http.get(
-        '/api/export/',
+        '/tms/api/export/',
         that.export,
         function (data) {
           console.log(data)
