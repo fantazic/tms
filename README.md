@@ -4,8 +4,9 @@
 * a user can set preferred hour for a day
 
 ### Package
-* tms: front end for template and javascript
-* api: REST API for authentication and all functions
+* app: Django project
+* tms: a front end app for templates and javascripts
+* api: a REST API app for authentication and all other functions with models
 
 ### Back End
 * Django
@@ -18,3 +19,4 @@
 
 ### Demo site
 * [catlog/tms](http://catlog.kr/tms/)
+    * nginx + gunicorn + django
