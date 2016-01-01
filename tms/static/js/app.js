@@ -22,6 +22,7 @@ application = new Vue({
 
     $.fn.datepicker.defaults.format = "yyyy-mm-dd"
     $.fn.datepicker.defaults.autoclose = true
+    $.fn.datepicker.defaults.todayHighlight = true
   },
 
   data: function () {
@@ -51,7 +52,8 @@ application = new Vue({
         from: null,
         to: null
       },
-      exportDates: []
+      exportDates: [],
+      csrf: this.getCookie('csrftoken')
     }
   },
 
@@ -111,7 +113,7 @@ application = new Vue({
         },
         {
           headers: {
-            "X-CSRFToken": that.getCookie('csrftoken')
+            "X-CSRFToken": that.csrf
           },
           emulateJSON: true
         }
@@ -134,6 +136,12 @@ application = new Vue({
         })
     },
 
+    addTask: function () {
+      that = this
+      that.newTask.date = that.date
+      that.newTask.action = 'Create'
+    },
+
     updateTask: function (task) {
       that = this
 
@@ -153,7 +161,7 @@ application = new Vue({
       that = this
 
       this.$http.post(
-        '/tms/api/update_task/',
+        '/tms/api/crud_task/',
         that.newTask,
         function (data) {
           console.log(data)
@@ -171,7 +179,7 @@ application = new Vue({
         },
         {
           headers: {
-            "X-CSRFToken": that.getCookie('csrftoken')
+            "X-CSRFToken": that.csrf
           },
           emulateJSON: true
         }
@@ -180,64 +188,17 @@ application = new Vue({
       })
     },
 
-    addTask: function (e) {
-      e.preventDefault()
-      that = this
-
-      this.$http.post(
-        '/tms/api/add_task/',
-        that.newTask,
-        function (data) {
-          console.log(data)
-          if (data.message == "Success") {
-            that.taskMessage = {type: 'success', message: 'A new Task is added'}
-            that.newTask = {'date': '', 'hour': '', 'note': ''}
-            that.date = data.date
-            that.tasks = data.tasks
-            that.dates = data.dates
-          } else {
-            that.taskMessage = {type: 'warning', message: data.message}
-          }
-        },
-        {
-          headers: {
-            "X-CSRFToken": that.getCookie('csrftoken')
-          },
-          emulateJSON: true
-        }
-      ).error(function (data, status, request) {
-        console.log(data)
-      })
-    },
-
-    getTasks: function (e) {
+    getDatesAndTasks: function (e) {
       that = this
 
       this.$http.get(
-        '/tms/api/get_tasks/',
-        {'date': that.date},
-        function (data) {
-          console.log(data)
-          if (data.message == "Success") {
-            that.tasks = data.tasks
-            that.date = data.date
-          }
-        }
-      ).error(function (data, status, request) {
-        console.log(data)
-      })
-    },
-
-    getDates: function (e) {
-      that = this
-
-      this.$http.get(
-        '/tms/api/get_dates/',
+        '/tms/api/get_dates_and_tasks/',
         {'date': that.date},
         function (data) {
           console.log(data)
           if (data.message == "Success") {
             that.dates = data.dates
+            that.tasks = data.tasks
             that.date = data.date
           }
         }
@@ -248,20 +209,17 @@ application = new Vue({
 
     datePrevious: function () {
       this.date = this.dates[0].date
-      this.getDates()
-      this.getTasks()
+      this.getDatesAndTasks()
     },
 
     dateNext: function () {
       this.date = this.dates[this.dates.length - 1].date
-      this.getDates()
-      this.getTasks()
+      this.getDatesAndTasks()
     },
 
     datePick: function (dd) {
       this.date = dd.date
-      this.getDates()
-      this.getTasks()
+      this.getDatesAndTasks()
     },
 
     isToday: function (dd) {
@@ -282,7 +240,7 @@ application = new Vue({
         },
         {
           headers: {
-            "X-CSRFToken": that.getCookie('csrftoken')
+            "X-CSRFToken": that.csrf
           },
           emulateJSON: true
         }

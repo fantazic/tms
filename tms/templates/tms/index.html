@@ -50,6 +50,7 @@
           </nav>
 
           <template v-if="!isLogin">
+            <!-- login or register form -->
             <div>
               <div class="col-md-2"></div>
               <div class="col-md-8">
@@ -88,60 +89,7 @@
           </template>
 
           <template v-if="isLogin">
-            <div class="row" id="newTask">
-              <div class="col-md-2"></div>
-              <div class="col-md-8">
-                <h3>Add a new task</h3>
-                <div class="well well-lg">
-                  <div id="taskAlerts" v-if="taskMessage">
-                    <div class="alert alert-{{ taskMessage.type }} alert-dismissible" role="alert">
-                      {{ taskMessage.message }}
-                    </div>
-                  </div>
-
-                  <form class="form-horizontal" role="form" @submit="addTask">
-                    <div class="form-group has-feedback">
-                      <label class="col-md-2" for="date">Date</label>
-                      <div class="col-md-6 date">
-                        <input type="text" id="date" class="form-control" placeholder="Date (yyyy-mm-dd)"
-                           v-model="newTask.date" data-provide="datepicker">
-                        <i class="glyphicon glyphicon-asterisk form-control-feedback text-danger" v-if="! newTask.date"></i>
-                      </div>
-                    </div>
-                    <div class="form-group has-feedback">
-                      <label class="col-md-2" for="hour">Hour</label>
-                      <div class="col-md-6">
-                        <select class="form-control" id="hour" v-model="newTask.hour">
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="form-group has-feedback">
-                      <label class="col-md-2" for="note">Note</label>
-                      <div class="col-md-6">
-                        <input type="text" id="note" class="form-control" placeholder="What to do"
-                           v-model="newTask.note">
-                        <i class="glyphicon glyphicon-asterisk form-control-feedback text-danger" v-if="! newTask.note"></i>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-md-6 col-md-offset-2">
-                        <button type="submit" class="btn btn-primary" :disabled="taskErrors">Add</button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div class="col-md-2"></div>
-            </div>
-
+            <!-- dates navigator -->
             <div class="row" id="dates">
               <div class="col-md-2"></div>
               <div class="col-md-8">
@@ -158,13 +106,14 @@
               <div class="col-md-2"></div>
             </div>
 
+            <!-- set preferred hour -->
             <div class="row" id="setHour">
               <div class="col-md-2"></div>
               <div class="col-md-8">
                 <h3>Set Hours</h3>
                 <form class="form-inline">
                   <div class="form-group">
-                    <label for="preferredHour">Preferred Hour</label>
+                    <label for="preferredHour">Preferred Hours for one day</label>
                     <select class="form-control" id="preferredHour" v-model="preferredHour" @change="setHour">
                       <option value="0">0 hour</option>
                       <template v-for="hh in hourOptions">
@@ -187,28 +136,34 @@
                       <h4 class="modal-title" id="taskModalLabel">Task</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                          <label for="taskNote">note</label>
-                          <input type="text" class="form-control" id="taskNote" v-model="newTask.note">
+                      <div id="task-alerts" v-if="taskMessage">
+                        <div class="alert alert-{{ taskMessage.type }} alert-dismissible" role="alert">
+                          {{ taskMessage.message }}
                         </div>
-                        <div class="form-group">
-                          <label for="taskDate">date</label>
-                          <input type="text" class="form-control" id="taskDate" v-model="newTask.date"
-                                 data-provide="datepicker">
-                        </div>
-                        <div class="form-group">
-                          <label for="taskHour">hour</label>
-                          <select class="form-control" id="taskHour" v-model="newTask.hour">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                          </select>
-                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="taskNote">note</label>
+                        <input type="text" class="form-control" id="taskNote" v-model="newTask.note">
+                      </div>
+                      <div class="form-group">
+                        <label for="taskDate">date</label>
+                        <input type="text" class="form-control" id="taskDate" v-model="newTask.date"
+                               data-provide="datepicker">
+                      </div>
+                      <div class="form-group">
+                        <label for="taskHour">hour</label>
+                        <select class="form-control" id="taskHour" v-model="newTask.hour">
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                        </select>
+                      </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
@@ -219,6 +174,7 @@
               </div>
             </div>
 
+            <!-- list of tasks -->
             <div class="row" id="tasks">
               <div class="col-md-2"></div>
               <div class="col-md-8">
@@ -233,6 +189,8 @@
                     {{ task.note }}
                   </li>
                 </ul>
+
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#taskModal" @click="addTask">Add a new Task</button>
               </div>
               <div class="col-md-2"></div>
             </div>

@@ -75,23 +75,31 @@ def me(request):
     return JsonResponse(response)
 
 
-def update_task(request):
+def crud_task(request):
     if request.user.is_authenticated():
-        task_id = request.POST['task_id']
-        note = request.POST['note']
+        action = request.POST['action']
         date = request.POST['date']
         hour = request.POST['hour']
-        action = request.POST['action']
+        note = request.POST['note']
 
-        if action == 'Edit':
+        message = 'Success'
+
+        if action == 'Create':
+            task = request.user.task_set.create(date=date, hour=hour, note=note)
+
+            if not task:
+                message = 'The task creation failed'
+        elif action == 'Edit':
+            task_id = request.POST['task_id']
             Task.objects.filter(pk=task_id).update(note=note, date=date, hour=hour)
         elif action == 'Delete':
+            task_id = request.POST['task_id']
             Task.objects.get(pk=task_id).delete()
 
         tasks = _get_tasks(request.user, date)
         dates = _get_dates(request.user, date)
 
-        response = {'message': 'Success', 'date': date, 'tasks': tasks, 'dates': dates}
+        response = {'message': message, 'date': date, 'tasks': tasks, 'dates': dates}
     else:
         response = {'message': 'Login first'}
 
@@ -118,24 +126,13 @@ def add_task(request):
     return JsonResponse(response)
 
 
-def get_tasks(request):
-    if request.user.is_authenticated():
-        date = request.GET.get('date', timezone.now().date())
-        tasks = _get_tasks(request.user, date)
-
-        response = ({'message': 'Success', 'tasks': tasks, 'date': date})
-    else:
-        response = ({'message': 'Login first'})
-
-    return JsonResponse(response)
-
-
-def get_dates(request):
+def get_dates_and_tasks(request):
     if request.user.is_authenticated():
         date = request.GET.get('date', timezone.now().date())
         dates = _get_dates(request.user, date)
+        tasks = _get_tasks(request.user, date)
 
-        response = ({'message': 'Success', 'dates': dates, 'date': date})
+        response = ({'message': 'Success', 'dates': dates, 'tasks': tasks, 'date': date})
     else:
         response = ({'message': 'Login first'})
 
