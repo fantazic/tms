@@ -11,5 +11,4 @@ urlpatterns = [
     url(r'^crud_task/$', views.crud_task, name='crudTask'),
     url(r'^get_dates_and_tasks/$', views.get_dates_and_tasks, name='getDatesAndTasks'),
     url(r'^set_hour/$', views.set_hour, name='setHour'),
-    url(r'^export/$', views.export, name='export'),
 ]

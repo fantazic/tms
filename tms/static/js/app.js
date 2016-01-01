@@ -48,11 +48,6 @@ application = new Vue({
       taskMessage: null,
       preferredHour: 0,
       hourOptions: new Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
-      export: {
-        from: null,
-        to: null
-      },
-      exportDates: [],
       csrf: this.getCookie('csrftoken')
     }
   },
@@ -74,13 +69,6 @@ application = new Vue({
     taskErrors: function () {
       return (! this.newTask.date || this.newTask.date == ''
       || ! this.newTask.note || this.newTask.note == '')
-    },
-    exportErrors: function () {
-      for (key in this.export) {
-        if (! this.export[key]) return true
-      }
-
-      return false
     }
   },
 
@@ -138,21 +126,30 @@ application = new Vue({
 
     addTask: function () {
       that = this
-      that.newTask.date = that.date
-      that.newTask.action = 'Create'
+
+      that.taskMessage = null
+      that.newTask = {
+        task_id: null,
+        date: that.date,
+        hour: '1',
+        note: null,
+        action: 'Create'
+      }
     },
 
     updateTask: function (task) {
       that = this
 
-      that.newTask = task
+      that.taskMessage = null
+      that.newTask = Vue.util.extend({}, task)
       that.newTask.action = 'Edit'
     },
 
     deleteTask: function (task) {
       that = this
 
-      that.newTask = task
+      that.taskMessage = null
+      that.newTask = Vue.util.extend({}, task)
       that.newTask.action = 'Delete'
     },
 
@@ -243,26 +240,6 @@ application = new Vue({
             "X-CSRFToken": that.csrf
           },
           emulateJSON: true
-        }
-      ).error(function (data, status, request) {
-        console.log(data)
-      })
-    },
-
-    exportTask: function (e) {
-      e.preventDefault()
-      that = this
-
-      this.$http.get(
-        '/tms/api/export/',
-        that.export,
-        function (data) {
-          console.log(data)
-          if (data.message == "Success") {
-            that.exportDates = data.exportDates
-
-            $('#exportModal').modal('toggle')
-          }
         }
       ).error(function (data, status, request) {
         console.log(data)
