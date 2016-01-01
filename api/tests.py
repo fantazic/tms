@@ -114,36 +114,3 @@ class ViewMethodTests(TestCase):
         user.task_set.create(user=user, date=self.date, hour=6)
         tasks = views._get_tasks(user, self.date)
         self.assertEquals(len(tasks), 1)
-
-
-class ExportMethodTest(TestCase):
-    def test_get_date_range(self):
-        """
-        _get_date_range should return dates between dateFrom to dateTo
-        """
-        dates = views._get_date_range('2015-12-15', '2015-12-17')
-        self.assertEquals(len(dates), 3)
-
-        dates = views._get_date_range('2015-12-15', '2015-12-15')
-        self.assertEquals(len(dates), 1)
-
-        dates = views._get_date_range('2015-12-15', '2015-12-14')
-        self.assertEquals(len(dates), 0)
-
-    def test_get_total_hours(self):
-        """
-        _get_total_hours should return the sum of hours of tasks
-        """
-        user = User.objects.create(username="export user")
-        date = timezone.now().date()
-
-        tasks = views._get_tasks(user, date)
-        self.assertEquals(views._get_total_hours(tasks), 0)
-
-        user.task_set.create(user=user, date=date, hour=4)
-        tasks = views._get_tasks(user, date)
-        self.assertEquals(views._get_total_hours(tasks), 4)
-
-        user.task_set.create(user=user, date=date, hour=4)
-        tasks = views._get_tasks(user, date)
-        self.assertEquals(views._get_total_hours(tasks), 8)
