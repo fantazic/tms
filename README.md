@@ -3,6 +3,9 @@
 * a user can create, update, delete a task
 * a user can set preferred hour for a day
 
+### Author
+* Jongwook Kim fantazic@gmail.com
+
 ### HOWTO
 * clone git
 * migrate for DB
