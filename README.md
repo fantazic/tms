@@ -1,7 +1,7 @@
-# Time Management System
+# Task Management System
 * a user can register and login
-* a user can create, update, delete a task
-* a user can set preferred hour for a day
+* a user can create, update, delete a task with hours
+* a user can set preferred hours for a day
 
 ### Author
 * Jongwook Kim fantazic@gmail.com
